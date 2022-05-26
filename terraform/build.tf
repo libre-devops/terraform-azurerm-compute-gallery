@@ -15,6 +15,6 @@ module "gallery" {
   location = module.rg.rg_location
   tags     = module.rg.rg_tags
 
-  gallery_name = "imggal-${var.short}-${var.loc}-${terraform.workspace}-01"
+  gallery_name = "imggal${var.short}${var.loc}${terraform.workspace}-01"
   description  = "A basic description"
 }
