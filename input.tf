@@ -1,13 +1,11 @@
-variable "identity_ids" {
-  description = "Specifies a list of user managed identity ids to be assigned to the VM."
-  type        = list(string)
-  default     = []
+variable "description" {
+  type        = string
+  description = "The description you would like to use for your gallery"
 }
 
-variable "identity_type" {
-  description = "The Managed Service Identity Type of this Virtual Machine."
+variable "gallery_name" {
   type        = string
-  default     = ""
+  description = "The name of the gallery"
 }
 
 variable "location" {

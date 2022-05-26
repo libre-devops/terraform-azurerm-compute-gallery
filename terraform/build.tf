@@ -6,4 +6,15 @@ module "rg" {
   tags     = local.tags
 
   #  lock_level = "CanNotDelete" // Do not set this value to skip lock
-} }
+}
+
+module "gallery" {
+  source = "registry.terraform.io/libre-devops/compute-gallery/azurerm"
+
+  rg_name  = module.rg.rg_name
+  location = module.rg.rg_location
+  tags     = module.rg.rg_tags
+
+  gallery_name = "imggal-${var.short}-${var.loc}-${terraform.workspace}-01"
+  description  = "A basic description"
+}
