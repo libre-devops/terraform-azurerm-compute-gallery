@@ -12,10 +12,10 @@ module "example" {
 
   compute_gallery = [
     {
-      name                = "gal${var.short}${var.loc}${var.env}01"
-      resource_group_name = module.rg.rg_name
-      location            = module.rg.rg_location
-      tags                = module.rg.rg_tags
+      name     = "gal${var.short}${var.loc}${var.env}01"
+      rg_name  = module.rg.rg_name
+      location = module.rg.rg_location
+      tags     = module.rg.rg_tags
 
       sharing = {
         permission = "Groups"
