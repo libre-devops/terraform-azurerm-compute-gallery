@@ -3,7 +3,7 @@ resource "azurerm_shared_image_gallery" "compute_gallery" {
   for_each = { for k, v in var.compute_gallery : k => v }
 
   name                = each.value.name
-  resource_group_name = each.value.resource_group_name
+  resource_group_name = each.value.rg_name
   location            = each.value.location
   description         = each.value.description
   tags                = each.value.tags
@@ -52,7 +52,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_compute_gallery"></a> [compute\_gallery](#input\_compute\_gallery) | The block used to create 1 or more compute galleries | <pre>list(object({<br>    name                = string<br>    resource_group_name = string<br>    location            = optional(string, "uksouth")<br>    description         = optional(string, "The default compute gallery used within the azure platform")<br>    tags                = map(string)<br>    sharing = optional(object({<br>      permission = optional(string, "Groups")<br>      community_gallery = optional(object({<br>        eula            = string<br>        prefix          = string<br>        publisher_email = string<br>        publisher_uri   = string<br>      }))<br>    }))<br>  }))</pre> | n/a | yes |
+| <a name="input_compute_gallery"></a> [compute\_gallery](#input\_compute\_gallery) | The block used to create 1 or more compute galleries | <pre>list(object({<br>    name        = string<br>    rg_name     = string<br>    location    = optional(string, "uksouth")<br>    description = optional(string, "The default compute gallery used within the azure platform")<br>    tags        = map(string)<br>    sharing = optional(object({<br>      permission = optional(string, "Groups")<br>      community_gallery = optional(object({<br>        eula            = string<br>        prefix          = string<br>        publisher_email = string<br>        publisher_uri   = string<br>      }))<br>    }))<br>  }))</pre> | n/a | yes |
 
 ## Outputs
 
@@ -61,6 +61,6 @@ No modules.
 | <a name="output_gallery_id"></a> [gallery\_id](#output\_gallery\_id) | The ID of the gallery |
 | <a name="output_gallery_location"></a> [gallery\_location](#output\_gallery\_location) | The location name of the gallery |
 | <a name="output_gallery_name"></a> [gallery\_name](#output\_gallery\_name) | The name name of the gallery |
-| <a name="output_gallery_resource_group_name"></a> [gallery\_resource\_group\_name](#output\_gallery\_resource\_group\_name) | The rg name of the gallery |
+| <a name="output_gallery_rg_name"></a> [gallery\_rg\_name](#output\_gallery\_rg\_name) | The rg name of the gallery |
 | <a name="output_gallery_tags"></a> [gallery\_tags](#output\_gallery\_tags) | The tags of the gallery |
 | <a name="output_gallery_unique_name"></a> [gallery\_unique\_name](#output\_gallery\_unique\_name) | The unique name of the gallery |

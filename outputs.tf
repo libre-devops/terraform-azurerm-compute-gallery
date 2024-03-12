@@ -13,7 +13,7 @@ output "gallery_name" {
   value       = { for k, v in azurerm_shared_image_gallery.compute_gallery : k => v.name }
 }
 
-output "gallery_resource_group_name" {
+output "gallery_rg_name" {
   description = "The rg name of the gallery"
   value       = { for k, v in azurerm_shared_image_gallery.compute_gallery : k => v.resource_group_name }
 }
