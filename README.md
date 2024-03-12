@@ -1,16 +1,33 @@
 ```hcl
-module "gallery" {
-  source = "registry.terraform.io/libre-devops/compute-gallery/azurerm"
+resource "azurerm_shared_image_gallery" "compute_gallery" {
+  for_each = { for k, v in var.compute_gallery : k => v }
 
-  rg_name  = module.rg.rg_name
-  location = module.rg.rg_location
-  tags     = module.rg.rg_tags
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
+  location            = each.value.location
+  description         = each.value.description
+  tags                = each.value.tags
 
-  gallery_name = "imggal${var.short}${var.loc}${terraform.workspace}01"
-  description  = "A basic description"
+  dynamic "sharing" {
+    for_each = each.value.sharing != null ? [each.value.sharing] : []
+    content {
+      permission = title(sharing.value.permission)
+
+
+      dynamic "community_gallery" {
+        for_each = sharing.value.community_gallery != null ? [sharing.value.community_gallery] : []
+        content {
+          eula            = community_gallery.value.eula
+          prefix          = community_gallery.value.prefix
+          publisher_email = community_gallery.value.publisher_email
+          publisher_uri   = community_gallery.value.publisher_uri
+        }
+      }
+    }
+  }
 }
-```
 
+```
 ## Requirements
 
 No requirements.
@@ -35,16 +52,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_description"></a> [description](#input\_description) | The description you would like to use for your gallery | `string` | n/a | yes |
-| <a name="input_gallery_name"></a> [gallery\_name](#input\_gallery\_name) | The name of the gallery | `string` | n/a | yes |
-| <a name="input_location"></a> [location](#input\_location) | The location for this resource to be put in | `string` | n/a | yes |
-| <a name="input_rg_name"></a> [rg\_name](#input\_rg\_name) | The name of the resource group, this module does not create a resource group, it is expecting the value of a resource group already exists | `string` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | A map of the tags to use on the resources that are deployed with this module. | `map(string)` | <pre>{<br>  "source": "terraform"<br>}</pre> | no |
+| <a name="input_compute_gallery"></a> [compute\_gallery](#input\_compute\_gallery) | The block used to create 1 or more compute galleries | <pre>list(object({<br>    name                = string<br>    resource_group_name = string<br>    location            = optional(string, "uksouth")<br>    description         = optional(string, "The default compute gallery used within the azure platform")<br>    tags                = map(string)<br>    sharing = optional(object({<br>      permission = optional(string, "Groups")<br>      community_gallery = optional(object({<br>        eula            = string<br>        prefix          = string<br>        publisher_email = string<br>        publisher_uri   = string<br>      }))<br>    }))<br>  }))</pre> | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_gallery_description"></a> [gallery\_description](#output\_gallery\_description) | The description of the gallery |
-| <a name="output_gallery_id"></a> [gallery\_id](#output\_gallery\_id) | The id of the gallery |
-| <a name="output_gallery_name"></a> [gallery\_name](#output\_gallery\_name) | The name of the gallery |
+| <a name="output_gallery_id"></a> [gallery\_id](#output\_gallery\_id) | The ID of the gallery |
+| <a name="output_gallery_location"></a> [gallery\_location](#output\_gallery\_location) | The location name of the gallery |
+| <a name="output_gallery_name"></a> [gallery\_name](#output\_gallery\_name) | The name name of the gallery |
+| <a name="output_gallery_resource_group_name"></a> [gallery\_resource\_group\_name](#output\_gallery\_resource\_group\_name) | The rg name of the gallery |
+| <a name="output_gallery_tags"></a> [gallery\_tags](#output\_gallery\_tags) | The tags of the gallery |
+| <a name="output_gallery_unique_name"></a> [gallery\_unique\_name](#output\_gallery\_unique\_name) | The unique name of the gallery |
